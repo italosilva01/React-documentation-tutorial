@@ -56,16 +56,42 @@ function Square(props){
         history:[{
           squares:Array(9).fill(null),
         }],
-        
+        pos:'',
         xIsNext:true,
         stepNumber:0
       };
     }
 
-    handleClick(i){
+    colRow(i){
+      let location;
+      //defining the row
+      if(i<3)
+        location = 'Row: 1, ';
+      else if(i<6)
+        location = 'Row: 2, ';
+      else if(i<9)
+        location = 'Row: 3, ';
+
+      //defining the column
+      if(i === 0||i === 3||i === 6)
+        location += 'Col: 1';
+      if(i === 1||i === 4||i === 5)
+        location += 'Col: 2';
+      if(i === 2||i === 5||i === 8)
+        location += 'Col: 3';
+
+      return location;
+
+    }
+
+    handleClick(i,p){
       const history = this.state.history.slice(0,this.state.stepNumber +1);
       const current = history[history.length - 1];
       const squares =  current.squares.slice();
+      
+      
+
+      //console.log(i); 
 
       if(calculateWinner(squares)||squares[i]){
         return;
@@ -79,6 +105,7 @@ function Square(props){
         }]),
         xIsNext: !this.state.xIsNext,
         stepNumber:history.length,
+        pos: this.colRow(i)
       });
     }
 
@@ -93,7 +120,9 @@ function Square(props){
       const history = this.state.history;
       const current = history[this.state.stepNumber];
       const winner = calculateWinner(current.squares);
-      
+      const play = this.state.pos;
+
+      //HISTORY
       const moves = history.map((step,move)=>{
         const desc = move?
         'Go to move #'+move:
@@ -101,7 +130,7 @@ function Square(props){
 
         return(
           <li key={move}>
-            <button onClick={()=>this.jumpTo(move)}>{desc}</button>
+            <button onClick={()=>this.jumpTo(move)}>{desc} <span>{play}</span></button>
           </li>
         );
       });
