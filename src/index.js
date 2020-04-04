@@ -1,6 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
+import Clock from './components/Clock/index'
+import Chronometer from './components/Chronometer/index'
 
 
 function Square(props){
@@ -12,6 +14,7 @@ function Square(props){
     </button>
   );
 }
+
   
   class Board extends React.Component {
  
@@ -121,6 +124,7 @@ function Square(props){
       const current = history[this.state.stepNumber];
       const winner = calculateWinner(current.squares);
       const play = this.state.pos;
+      let timeFinal ;
 
       //HISTORY
       const moves = history.map((step,move)=>{
@@ -138,6 +142,7 @@ function Square(props){
       let status;
       if(winner){
         status = 'Winner: '+winner;
+        timeFinal = new Date();
       }else{
         status = 'Next player: '+(this.state.xIsNext?'X':'O');
       }
@@ -152,6 +157,8 @@ function Square(props){
           <div className="game-info">
             <div>{status}</div>
             <ol>{moves}</ol>
+            <Clock/>
+            <Chronometer timeFinal={timeFinal}/>
           </div>
         </div>
       );
@@ -179,6 +186,7 @@ function Square(props){
       const [a, b, c] = lines[i];
       
       if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
+
         return squares[a];
       }
     }
