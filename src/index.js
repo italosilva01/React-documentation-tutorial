@@ -1,6 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
+import Clock from './components/Clock/index'
+import Chronometer from './components/Chronometer/index'
 
 
 function Square(props){
@@ -12,6 +14,7 @@ function Square(props){
     </button>
   );
 }
+
   
   class Board extends React.Component {
  
@@ -55,17 +58,48 @@ function Square(props){
       
         history:[{
           squares:Array(9).fill(null),
+          
         }],
-        
+        position:[
+          ''
+        ],
         xIsNext:true,
         stepNumber:0
       };
+    }
+
+    
+    
+    colRow(i){
+      let location;
+      //defining the row
+      if(i<3)
+        location = 'Row: 1, ';
+      else if(i<6)
+        location = 'Row: 2, ';
+      else if(i<9)
+        location = 'Row: 3, ';
+
+      //defining the column
+      if(i === 0||i === 3||i === 6)
+        location += 'Col: 1';
+      if(i === 1||i === 4||i === 7)
+        location += 'Col: 2';
+      if(i === 2||i === 5||i === 8)
+        location += 'Col: 3';
+
+      return location;
+
     }
 
     handleClick(i){
       const history = this.state.history.slice(0,this.state.stepNumber +1);
       const current = history[history.length - 1];
       const squares =  current.squares.slice();
+      const position = this.state.position;
+      let pos= this.colRow(i);
+
+      //console.log(i); 
 
       if(calculateWinner(squares)||squares[i]){
         return;
@@ -75,12 +109,18 @@ function Square(props){
       this.setState({
         history: history.concat([{
           squares:squares,
-
+         
         }]),
+        
+        position:position.concat(pos),
         xIsNext: !this.state.xIsNext,
-        stepNumber:history.length,
+        stepNumber:history.length
       });
+
+      console.log(this.state.position);
     }
+
+    //console.log(this.state.pos);
 
     jumpTo(step){
       this.setState({
@@ -93,22 +133,26 @@ function Square(props){
       const history = this.state.history;
       const current = history[this.state.stepNumber];
       const winner = calculateWinner(current.squares);
-      
+      const play = this.state.position;
+      let timeFinal ;
+
+      //HISTORY
       const moves = history.map((step,move)=>{
         const desc = move?
-        'Go to move #'+move:
+        'Go to move #'+move+' ':
         'Go to game start';
 
         return(
           <li key={move}>
-            <button onClick={()=>this.jumpTo(move)}>{desc}</button>
+            <button onClick={()=>this.jumpTo(move)}>{desc} {play[move]} </button>
           </li>
         );
       });
 
       let status;
       if(winner){
-        status = 'Winner: '+winner;
+        status = 'Wlet position;inner: '+winner;
+        timeFinal = new Date();//time at the end of the game
       }else{
         status = 'Next player: '+(this.state.xIsNext?'X':'O');
       }
@@ -123,6 +167,8 @@ function Square(props){
           <div className="game-info">
             <div>{status}</div>
             <ol>{moves}</ol>
+            <Clock/>
+            <Chronometer timeFinal={timeFinal}/>
           </div>
         </div>
       );
@@ -150,6 +196,7 @@ function Square(props){
       const [a, b, c] = lines[i];
       
       if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
+
         return squares[a];
       }
     }
