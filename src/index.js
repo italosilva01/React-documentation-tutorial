@@ -58,13 +58,18 @@ function Square(props){
       
         history:[{
           squares:Array(9).fill(null),
+          
         }],
-        pos:'',
+        position:[
+          ''
+        ],
         xIsNext:true,
         stepNumber:0
       };
     }
 
+    
+    
     colRow(i){
       let location;
       //defining the row
@@ -78,7 +83,7 @@ function Square(props){
       //defining the column
       if(i === 0||i === 3||i === 6)
         location += 'Col: 1';
-      if(i === 1||i === 4||i === 5)
+      if(i === 1||i === 4||i === 7)
         location += 'Col: 2';
       if(i === 2||i === 5||i === 8)
         location += 'Col: 3';
@@ -87,12 +92,12 @@ function Square(props){
 
     }
 
-    handleClick(i,p){
+    handleClick(i){
       const history = this.state.history.slice(0,this.state.stepNumber +1);
       const current = history[history.length - 1];
       const squares =  current.squares.slice();
-      
-      
+      const position = this.state.position;
+      let pos= this.colRow(i);
 
       //console.log(i); 
 
@@ -104,13 +109,18 @@ function Square(props){
       this.setState({
         history: history.concat([{
           squares:squares,
-
+         
         }]),
+        
+        position:position.concat(pos),
         xIsNext: !this.state.xIsNext,
-        stepNumber:history.length,
-        pos: this.colRow(i)
+        stepNumber:history.length
       });
+
+      console.log(this.state.position);
     }
+
+    //console.log(this.state.pos);
 
     jumpTo(step){
       this.setState({
@@ -123,26 +133,26 @@ function Square(props){
       const history = this.state.history;
       const current = history[this.state.stepNumber];
       const winner = calculateWinner(current.squares);
-      const play = this.state.pos;
+      const play = this.state.position;
       let timeFinal ;
 
       //HISTORY
       const moves = history.map((step,move)=>{
         const desc = move?
-        'Go to move #'+move:
+        'Go to move #'+move+' ':
         'Go to game start';
 
         return(
           <li key={move}>
-            <button onClick={()=>this.jumpTo(move)}>{desc} <span>{play}</span></button>
+            <button onClick={()=>this.jumpTo(move)}>{desc} {play[move]} </button>
           </li>
         );
       });
 
       let status;
       if(winner){
-        status = 'Winner: '+winner;
-        timeFinal = new Date();
+        status = 'Wlet position;inner: '+winner;
+        timeFinal = new Date();//time at the end of the game
       }else{
         status = 'Next player: '+(this.state.xIsNext?'X':'O');
       }
