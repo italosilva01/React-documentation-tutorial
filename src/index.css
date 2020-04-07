@@ -16,7 +16,7 @@ body {
     border-bottom: 12px solid #2e3436 ;
 
   }
-
+  /*Squares*/
   .board-row #one{
     border-top: none;
   }  
@@ -72,12 +72,14 @@ body {
     padding: 0;
     font-size: 100px;
     text-align: center;
-    
+    color:#2e3436;
   }
   
   .square:focus {
     outline: none;
+    -moz-outline:0;
   }
+  
   
 
   
@@ -87,21 +89,30 @@ body {
   
   .game {
     display: flex;
-    flex-direction: row;
-    justify-content: center;  
+    flex-direction: column;
+    justify-content: space-between;  
     align-items: center;
     flex-wrap: wrap;
-    width: 100%;
-    height: 100%;
+    width: 90%;
+    height: 90%;
     margin: 0 auto; 
-    border: 1px solid black; 
   }
 
   .game-board{
+    margin: 0;
 
   }
   
-  .game-info {
-    
+  .game-info { 
+    margin-bottom: 2%;
+    font-size: 24px;
+    font-weight: bold;
+    line-height: 34px;
+    width: 30%;
+    text-align: center;
   }
+  .game-info > div{
+    color:#2e3436;
+  }
+  
   
