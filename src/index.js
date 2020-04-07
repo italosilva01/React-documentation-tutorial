@@ -48,13 +48,12 @@ import Board from './components/Board'
     }
 
     handleClick(i){
+      
       const history = this.state.history.slice(0,this.state.stepNumber +1);
       const current = history[history.length - 1];
       const squares =  current.squares.slice();
       const position = this.state.position;
-      let pos= this.colRow(i);
-
-      //console.log(i); 
+      let pos= this.colRow(i);//capturing the position of the selected item
 
       if(calculateWinner(squares)||squares[i]){
         return;
@@ -72,24 +71,23 @@ import Board from './components/Board'
         stepNumber:history.length
       });
 
-      console.log(this.state.position);
     }
-
-    //console.log(this.state.pos);
 
     jumpTo(step){
       this.setState({
         stepNumber:step,
         xIsNext:(step%2) ===0,
-      })
-    }
+      });
+     
+    };
 
     render() {
       const history = this.state.history;
       const current = history[this.state.stepNumber];
       const winner = calculateWinner(current.squares);
       const play = this.state.position;
-      let timeFinal ;
+      let timeFinal;
+
 
       //HISTORY
       const moves = history.map((step,move)=>{
@@ -104,26 +102,26 @@ import Board from './components/Board'
         );
       });
 
-      let status;
+      let status; 
       if(winner){
-        status = 'Wlet position;inner: '+winner;
-        timeFinal = new Date();//time at the end of the game
+        status = 'Winner: '+winner;
+        timeFinal = new Date();//time at the endmoves of the game
       }else{
         status = 'Next player: '+(this.state.xIsNext?'X':'O');
       }
       return (
         <div className="game">
+          <div className="game-info">
+            <div>{status}</div>
+            <ol></ol>
+            
+          </div>
+
           <div className="game-board">
             <Board 
               squares = {current.squares}
               onClick={(i)=>this.handleClick(i)}
             />
-          </div>
-          <div className="game-info">
-            <div>{status}</div>
-            <ol>{moves}</ol>
-            <Clock/>
-            <Chronometer timeFinal={timeFinal}/>
           </div>
         </div>
       );

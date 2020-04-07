@@ -4,7 +4,7 @@ function Square(props){
     //This function renders square
     return(
       //props.onClick and props.value  
-      <button className="square" onClick={props.onClick}>
+      <button className="square" onClick={props.onClick} id={props.id}>
         {props.value}
       </button>
     );
